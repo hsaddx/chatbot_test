@@ -15,4 +15,3 @@ langchain_teddynote
 pandas
 matplotlib
 tabulate
-dotenv
