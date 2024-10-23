@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import os
 
 load_dotenv()
-openai_api_key = os.getenv("openai_api_key")
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # API 키 설정
 os.environ["OPENAI_API_KEY"] = openai_api_key
