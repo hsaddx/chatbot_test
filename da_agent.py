@@ -11,10 +11,10 @@ import matplotlib.pyplot as plt
 import os
 
 load_dotenv()
-openai_api_key = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # API 키 설정
-os.environ["OPENAI_API_KEY"] = openai_api_key
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # Streamlit 앱 설정
 st.title("CSV 데이터 분석 챗봇 💬")
