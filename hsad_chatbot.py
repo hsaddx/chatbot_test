@@ -22,7 +22,7 @@ import functools
 import operator
 import time
 
-load_dotenv(dotenv_path='https://github.com/hsaddx/test_hsad_chatbot/.env')
+load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
