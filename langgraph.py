@@ -25,17 +25,16 @@ import time
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
-LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
 
 # API 키 설정
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-os.environ["TAVILY_API_KEY"] = TAVILY_API_KEY
+os.environ["OPENAI_API_KEY"]=OPENAI_API_KEY
+os.environ["TAVILY_API_KEY"]=TAVILY_API_KEY
 
 #랭스미스 키&프로젝트 입력
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
 os.environ["LANGCHAIN_PROJECT"] = "1021"
-os.environ["LANGCHAIN_API_KEY"] = LANGCHAIN_API_KEY
+os.environ["LANGCHAIN_API_KEY"] = "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" #개인API
 
 #Tools
 tavily_tool = TavilySearchResults(max_results=5)
@@ -250,11 +249,8 @@ def feedback_node(state):
 
     st.chat_message("assistant").write(feedback_message)
     
-    #user_response = st.chat_input()
-    
-    time.sleep(3)
-    
-    user_message = ("enough")
+    user_response = user_input
+    user_message = HumanMessage(content=user_response, name="user")
 
     st.chat_message("user").write(user_message)
 
@@ -262,7 +258,7 @@ def feedback_node(state):
     state["messages"].append(user_message)
 
     break
-    
+      
     pass
 
 
@@ -330,7 +326,6 @@ def ask(query):
 
         response = graph.stream(state)
         print(response)
-
         parser_callback = AgentCallbacks(AgentState)
         stream_parser = AgentStreamParser(parser_callback)
 
@@ -344,9 +339,10 @@ def ask(query):
                 if 'messages' in researcher_data:
                     for message in researcher_data['messages']:    
                         st.chat_message("assistant").write(message.content)
+                elif 'Planner' in step:
+                    feedback_node(state)  # feedback_node 호출
 
-print_messages()  # 저장된 메시지 출력
-
+print_messages()
 
 user_input = st.chat_input("궁금한 내용을 물어보세요!")  # 사용자 입력 받기
 
