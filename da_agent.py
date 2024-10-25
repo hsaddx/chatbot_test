@@ -12,6 +12,7 @@ import os
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+print(OPENAI_API_KEY)
 
 # API 키 설정
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
