@@ -20,7 +20,7 @@ from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
 
-openai.api_key = st.secrets["openai_api_key"]
+openai_api_key = st.secrets["openai_api_key"]
 
 def main():
     st.set_page_config(
