@@ -36,18 +36,21 @@ def main():
     if "processComplete" not in st.session_state:
         st.session_state.processComplete = None
 
-    openai_api_key = st.secrets["openai_api_key"]
+    
     
     with st.sidebar:
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
-        process = st.button("Process")
-    if process:
+    if uploaded_files:
         files_text = get_text(uploaded_files)
         text_chunks = get_text_chunks(files_text)
         vetorestore = get_vectorstore(text_chunks)
-     
+        
+        # Conversation chain 초기화
+        openai_api_key = st.secrets["openai_api_key"]
+        
         st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
         st.session_state.processComplete = True
+        st.success("문서 처리가 완료되었습니다!")
 
     if 'messages' not in st.session_state:
         st.session_state['messages'] = [{"role": "assistant", 
