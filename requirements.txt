@@ -15,3 +15,11 @@ langchain_teddynote
 pandas
 matplotlib
 tabulate
+pysqlite3-binary
+chromadb
+unstructured
+sentence-transformers
+faiss-cpu
+pypdf
+loguru
+docx2txt
