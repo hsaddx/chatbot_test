@@ -20,8 +20,6 @@ from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
 
-openai_api_key = st.secrets["openai_api_key"]
-
 def main():
     st.set_page_config(
     page_title="DirChat",
@@ -38,6 +36,8 @@ def main():
     if "processComplete" not in st.session_state:
         st.session_state.processComplete = None
 
+    openai_api_key = st.secrets["openai_api_key"]
+    
     with st.sidebar:
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
         process = st.button("Process")
@@ -47,7 +47,6 @@ def main():
         vetorestore = get_vectorstore(text_chunks)
      
         st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
-
         st.session_state.processComplete = True
 
     if 'messages' not in st.session_state:
@@ -83,7 +82,6 @@ def main():
                     st.markdown(source_documents[1].metadata['source'], help = source_documents[1].page_content)
                     st.markdown(source_documents[2].metadata['source'], help = source_documents[2].page_content)
                     
-
 
 # Add assistant message to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
