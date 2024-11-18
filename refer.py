@@ -164,6 +164,19 @@ def get_text_chunks(text):
     chunks = text_splitter.split_documents(text)
     return chunks
 
+# 검색 결과에 점수 추가
+def get_documents_with_scores(vetorestore, query, top_k=5):
+    # similarity_search_with_score로 검색 결과와 점수 가져오기
+    results_with_scores = vetorestore.similarity_search_with_score(query, k=top_k)
+
+    # 점수를 metadata에 추가
+    documents = []
+    for doc, score in results_with_scores:
+        doc.metadata["score"] = score  # 점수를 metadata에 추가
+        documents.append(doc)
+    
+    return documents
+
 
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
