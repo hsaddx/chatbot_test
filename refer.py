@@ -171,7 +171,6 @@ def get_conversation_chain(vetorestore,openai_api_key):
             chain_type="stuff", 
             retriever=vetorestore.as_retriever(search_type = 'mmr', vervose = True), 
             memory=ConversationBufferMemory(memory_key='chat_history', return_messages=True, output_key='answer'),
-            chain_type="stuff",
             chain_type_kwargs={"prompt": custom_prompt}, 
             get_chat_history=lambda h: h,
             return_source_documents=True,
