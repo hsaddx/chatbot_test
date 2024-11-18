@@ -81,18 +81,30 @@ def main():
                     st.session_state.chat_history = result['chat_history']
                 response = result['answer']
                 source_documents = result['source_documents']
-
                 st.markdown(response)
-                with st.expander("참고 문서 확인"):
-                    for doc in source_documents[:3]:
+
+                # 참고 문서 필터링 및 표시
+                if source_documents:
+                    threshold = 0.8  # 연관성 기준
+                    filtered_documents = [
+                        doc for doc in source_documents if doc.metadata.get("score", 0) >= threshold
+                    ]
+                    for doc in filtered_documents[:3]:  # 최대 3개의 문서 표시
                         source = doc.metadata.get("source", "출처 알 수 없음")
                         page = doc.metadata.get("page", "알 수 없음")
+                        with st.expander(f"참고 문서: {source} (Page {page})"):
+                            st.markdown(doc.page_content)
+                
+#                with st.expander("참고 문서 확인"):
+#                    for doc in source_documents[:3]:
+#                        source = doc.metadata.get("source", "출처 알 수 없음")
+#                        page = doc.metadata.get("page", "알 수 없음")
                         
                         # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
-                        if "Page" in source:
-                            st.markdown(f"**출처:** {source}", help=doc.page_content)
-                        else:
-                            st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
+#                        if "Page" in source:
+#                            st.markdown(f"**출처:** {source}", help=doc.page_content)
+#                        else:
+#                            st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
                     
                     
 
