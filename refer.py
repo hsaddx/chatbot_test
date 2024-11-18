@@ -143,7 +143,7 @@ def get_vectorstore(text_chunks):
 
 def get_conversation_chain(vetorestore,openai_api_key):
     
-    prompt_template = 
+    prompt_template =
     """
     You are an assistant for question-answering tasks.
     Use the following pieces of retrieved context to answer the question.
