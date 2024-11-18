@@ -90,8 +90,7 @@ def main():
                 st.markdown(response)
                 
                 # 참고 문서 출력
-                display_relevant_documents(source_documents, threshold=0.2)
-                st.markdown(threshold)
+                display_relevant_documents(source_documents, threshold=0.3)
         # Add assistant message to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
                 
@@ -227,12 +226,13 @@ def display_relevant_documents(source_documents, threshold=0.8):
             source = doc.metadata.get("source", "출처 알 수 없음")
             page = doc.metadata.get("page", "알 수 없음")
 
-            with st.expander(f"참고 문서: {source} (Page {page})"):
-            # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
-                if "Page" in source:
-                        st.markdown(f"**출처:** {source}", help=doc.page_content)
-                else:
-                        st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
+            if "Page" in source:
+                with st.expander(f"참고 문서: {source} "):
+                    st.markdown(doc.page_content)
+            else:
+                with st.expander(f"참고 문서: {source} ,Page {page}"):
+                    st.markdown(doc.page_content)
+                
             
 
 def get_conversation_chain(vetorestore,openai_api_key):
