@@ -151,9 +151,6 @@ def main():
                     
                     
 
-# Add assistant message to chat history
-        st.session_state.messages.append({"role": "assistant", "content": response})
-
 def tiktoken_len(text):
     tokenizer = tiktoken.get_encoding("cl100k_base")
     tokens = tokenizer.encode(text)
@@ -228,8 +225,14 @@ def display_relevant_documents(source_documents, threshold=0.8):
         for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
             source = doc.metadata.get("source", "출처 알 수 없음")
             page = doc.metadata.get("page", "알 수 없음")
-            with st.expander(f"참고 문서: {source} (페이지: {page})"):
-                st.markdown(doc.page_content)
+
+            with st.expander(f"참고 문서: {source} (Page {page})"):
+            # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
+                if "Page" in source:
+                        st.markdown(f"**출처:** {source}", help=doc.page_content)
+                else:
+                        st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
+            
 
 def get_conversation_chain(vetorestore,openai_api_key):
     
