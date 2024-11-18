@@ -85,7 +85,7 @@ def main():
 
                 # 참고 문서 필터링 및 표시
                 if source_documents:
-                    threshold = 0.8  # 연관성 기준
+                    threshold = 0.7  # 연관성 기준
                     filtered_documents = [
                         doc for doc in source_documents if doc.metadata.get("score", 0) >= threshold
                     ]
