@@ -113,6 +113,12 @@ def get_text(docs):
         if '.pdf' in doc.name:
             loader = PyPDFLoader(file_name)
             documents = loader.load_and_split()
+            # 페이지 번호를 메타데이터에 보정하여 추가
+            for doc in documents:
+                if "page" in doc.metadata:
+                    doc.metadata["page"] += 1
+                doc.metadata["source"] = f"{file_name}, Page {doc.metadata.get('page', '알 수 없음')}"
+            doc_list.extend(documents)
         elif '.docx' in doc.name:
             loader = Docx2txtLoader(file_name)
             documents = loader.load_and_split()
