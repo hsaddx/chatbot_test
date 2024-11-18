@@ -84,7 +84,7 @@ def main():
 
                 st.markdown(response)
                 with st.expander("참고 문서 확인"):
-                    for doc in source_documents:
+                    for doc in source_documents[:3]:
                         source = doc.metadata.get("source", "출처 알 수 없음")
                         page = doc.metadata.get("page", "알 수 없음")
                         
@@ -94,9 +94,6 @@ def main():
                         else:
                             st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
                     
-                    #st.markdown(source_documents[0].metadata['source'], help = source_documents[0].page_content)
-                    #st.markdown(source_documents[1].metadata['source'], help = source_documents[1].page_content)
-                    #st.markdown(source_documents[2].metadata['source'], help = source_documents[2].page_content)
                     
 
 # Add assistant message to chat history
