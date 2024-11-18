@@ -152,7 +152,6 @@ def get_conversation_chain(vetorestore,openai_api_key):
     Use the following pieces of retrieved context to answer the question.
     If you don't know the answer, just say that you don't know.
     Answer in Korean.
-    Please mark the page.
     
     #Context:
     {context}
