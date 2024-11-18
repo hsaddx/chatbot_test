@@ -76,31 +76,51 @@ def main():
             chain = st.session_state.conversation
 
             with st.spinner("Thinking..."):
+
+                # 검색 결과와 점수 가져오기
+                source_documents = get_documents_with_scores(vetorestore, query, top_k=5)
+
+                # Chat 처리
                 result = chain({"question": query})
                 with get_openai_callback() as cb:
                     st.session_state.chat_history = result['chat_history']
                 response = result['answer']
-                source_documents = result['source_documents']
+
+                # 응답 출력
                 st.markdown(response)
+                # 참고 문서 출력
+                display_relevant_documents(source_documents, threshold=0.8)
+
+        # Add assistant message to chat history
+        st.session_state.messages.append({"role": "assistant", "content": response})
                 
-                for doc in source_documents:
-                    st.write(doc.metadata)
+                
+                
+                # result = chain({"question": query})
+                # with get_openai_callback() as cb:
+                #     st.session_state.chat_history = result['chat_history']
+                # response = result['answer']
+                # source_documents = result['source_documents']
+                # st.markdown(response)
+                
+                # for doc in source_documents:
+                #     st.write(doc.metadata)
                     
-                # 참고 문서 필터링 및 표시
-                if source_documents:
-                    threshold = 0.8  # 연관성 기준
-                    filtered_documents = [
-                        doc for doc in source_documents if doc.metadata.get("score", 1.0) >= threshold
-                    ]
+                # # 참고 문서 필터링 및 표시
+                # if source_documents:
+                #     threshold = 0.8  # 연관성 기준
+                #     filtered_documents = [
+                #         doc for doc in source_documents if doc.metadata.get("score", 1.0) >= threshold
+                #     ]
                 
-                    if not filtered_documents:
-                        st.info("관련성 있는 참고 문서를 찾을 수 없습니다.")
-                    else:
-                        for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
-                            source = doc.metadata.get("source", "출처 알 수 없음")
-                            page = doc.metadata.get("page", "알 수 없음")
-                            with st.expander(f"참고 문서: {source} (페이지: {page})"):
-                                st.markdown(doc.page_content)
+                #     if not filtered_documents:
+                #         st.info("관련성 있는 참고 문서를 찾을 수 없습니다.")
+                #     else:
+                #         for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
+                #             source = doc.metadata.get("source", "출처 알 수 없음")
+                #             page = doc.metadata.get("page", "알 수 없음")
+                #             with st.expander(f"참고 문서: {source} (페이지: {page})"):
+                #                 st.markdown(doc.page_content)
                     
                     
 #                    filtered_documents = [
@@ -177,8 +197,13 @@ def get_text_chunks(text):
     )
     chunks = text_splitter.split_documents(text)
     return chunks
+            
+def get_vectorstore(text_chunks):
+    embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
+    vectordb = FAISS.from_documents(text_chunks, embeddings)
+    return vectordb
 
-# 검색 결과에 점수 추가
+
 def get_documents_with_scores(vetorestore, query, top_k=5):
     # similarity_search_with_score로 검색 결과와 점수 가져오기
     results_with_scores = vetorestore.similarity_search_with_score(query, k=top_k)
@@ -191,12 +216,20 @@ def get_documents_with_scores(vetorestore, query, top_k=5):
     
     return documents
 
+def display_relevant_documents(source_documents, threshold=0.8):
+    # 점수를 기준으로 필터링
+    filtered_documents = [
+        doc for doc in source_documents if doc.metadata.get("score", 1.0) >= threshold
+    ]
 
-                
-def get_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
-    vectordb = FAISS.from_documents(text_chunks, embeddings)
-    return vectordb
+    if not filtered_documents:
+        st.info("관련성 있는 참고 문서를 찾을 수 없습니다.")
+    else:
+        for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
+            source = doc.metadata.get("source", "출처 알 수 없음")
+            page = doc.metadata.get("page", "알 수 없음")
+            with st.expander(f"참고 문서: {source} (페이지: {page})"):
+                st.markdown(doc.page_content)
 
 def get_conversation_chain(vetorestore,openai_api_key):
     
@@ -225,8 +258,7 @@ def get_conversation_chain(vetorestore,openai_api_key):
     conversation_chain = ConversationalRetrievalChain.from_llm(
             llm=llm, 
             chain_type="stuff", 
-            retriever=vetorestore.as_retriever(search_type = 'similarity', vervose = True), 
-            results_with_scores = retriever.similarity_search_with_score(query, k=5),
+            retriever=vetorestore.as_retriever(search_type = 'mmr', vervose = True), 
             memory=ConversationBufferMemory(memory_key='chat_history', return_messages=True, output_key='answer'),
             combine_docs_chain_kwargs={"prompt": custom_prompt}, 
             get_chat_history=lambda h: h,
