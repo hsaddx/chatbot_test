@@ -129,7 +129,7 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
     
     #embeddings = HuggingFaceEmbeddings(
     #                                    model_name="jhgan/ko-sroberta-multitask",
