@@ -85,8 +85,14 @@ def main():
                 st.markdown(response)
                 with st.expander("참고 문서 확인"):
                     for doc in source_documents:
-                        source_info = f"출처: {doc.metadata.get('source', '알 수 없음')}, 페이지: {doc.metadata.get('page', '알 수 없음')}"
-                        st.markdown(f"- **{source_info}**", help=doc.page_content)
+                        source = doc.metadata.get("source", "출처 알 수 없음")
+                        page = doc.metadata.get("page", "알 수 없음")
+                        
+                        # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
+                        if "Page" in source:
+                            st.markdown(f"**출처:** {source}")
+                        else:
+                            st.markdown(f"**출처:** {source}, **페이지:** {page}", help=doc.page_content)
                     
                     #st.markdown(source_documents[0].metadata['source'], help = source_documents[0].page_content)
                     #st.markdown(source_documents[1].metadata['source'], help = source_documents[1].page_content)
@@ -115,9 +121,10 @@ def get_text(docs):
             documents = loader.load_and_split()
             # 페이지 번호를 메타데이터에 보정하여 추가
             for doc in documents:
-                if "page" in doc.metadata:
-                    doc.metadata["page"] += 1
-                doc.metadata["source"] = f"{file_name}, Page {doc.metadata.get('page', '알 수 없음')}"
+                page = doc.metadata.get("page", "알 수 없음")
+                if isinstance(page, int):
+                    page += 1  # 페이지 번호 보정
+                doc.metadata["source"] = f"{file_name}, Page {page}"  # 페이지 포함
             #doc_list.extend(documents)
         elif '.docx' in doc.name:
             loader = Docx2txtLoader(file_name)
