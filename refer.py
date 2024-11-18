@@ -16,6 +16,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import FAISS
 
+from langchain_core.prompts import PromptTemplate
+
 # from streamlit_chat import message
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
