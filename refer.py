@@ -11,6 +11,7 @@ from langchain.document_loaders import UnstructuredPowerPointLoader
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import FAISS
