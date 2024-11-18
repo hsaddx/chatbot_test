@@ -160,8 +160,8 @@ def get_conversation_chain(vetorestore,openai_api_key):
     """
         
     custom_prompt = PromptTemplate(
-    input_variables=["context", "question"],
-    template=prompt_template
+        input_variables=["context", "question"],
+        template=prompt_template
     )
     
     
