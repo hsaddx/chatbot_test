@@ -90,9 +90,9 @@ def main():
                         
                         # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
                         if "Page" in source:
-                            st.markdown(f"**출처:** {source}")
+                            st.markdown(f"**출처:** {source}", help=doc.page_content)
                         else:
-                            st.markdown(f"**출처:** {source}, **페이지:** {page}", help=doc.page_content)
+                            st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
                     
                     #st.markdown(source_documents[0].metadata['source'], help = source_documents[0].page_content)
                     #st.markdown(source_documents[1].metadata['source'], help = source_documents[1].page_content)
