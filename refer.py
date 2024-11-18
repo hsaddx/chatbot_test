@@ -82,7 +82,10 @@ def main():
                 response = result['answer']
                 source_documents = result['source_documents']
                 st.markdown(response)
-
+                
+                for doc in source_documents:
+                    st.write(doc.metadata)
+                    
                 # 참고 문서 필터링 및 표시
                 if source_documents:
                     threshold = 0.3  # 연관성 기준
