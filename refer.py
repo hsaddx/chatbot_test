@@ -177,7 +177,22 @@ def get_documents_with_scores(vetorestore, query, top_k=5):
     
     return documents
 
+# 참조 문서 출력 함수
+def display_relevant_documents(source_documents, threshold=0.8):
+    # 점수를 기준으로 필터링
+    filtered_documents = [
+        doc for doc in source_documents if doc.metadata.get("score", 1.0) >= threshold
+    ]
 
+    if not filtered_documents:
+        st.info("관련성 있는 참고 문서를 찾을 수 없습니다.")
+    else:
+        for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
+            source = doc.metadata.get("source", "출처 알 수 없음")
+            page = doc.metadata.get("page", "알 수 없음")
+            with st.expander(f"참고 문서: {source} (페이지: {page})"):
+                st.markdown(doc.page_content)
+                
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
     vectordb = FAISS.from_documents(text_chunks, embeddings)
