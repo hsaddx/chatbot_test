@@ -198,6 +198,7 @@ def get_conversation_chain(vetorestore,openai_api_key):
             llm=llm, 
             chain_type="stuff", 
             retriever=vetorestore.as_retriever(search_type = 'similarity', vervose = True), 
+            results_with_scores = retriever.similarity_search_with_score(query, k=5),
             memory=ConversationBufferMemory(memory_key='chat_history', return_messages=True, output_key='answer'),
             combine_docs_chain_kwargs={"prompt": custom_prompt}, 
             get_chat_history=lambda h: h,
