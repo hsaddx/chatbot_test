@@ -139,12 +139,33 @@ def get_vectorstore(text_chunks):
     return vectordb
 
 def get_conversation_chain(vetorestore,openai_api_key):
+    
+    prompt = PromptTemplate.from_template(
+    """
+    You are an assistant for question-answering tasks.
+    Use the following pieces of retrieved context to answer the question.
+    If you don't know the answer, just say that you don't know.
+    Answer in Korean.
+    Please mark the page.
+    
+    #Context:
+    {context}
+    
+    #Question:
+    {question}
+    
+    #Answer:
+    """
+    )
+    
+    
     llm = ChatOpenAI(openai_api_key=openai_api_key, model_name = 'gpt-4o',temperature=0)
     conversation_chain = ConversationalRetrievalChain.from_llm(
             llm=llm, 
             chain_type="stuff", 
             retriever=vetorestore.as_retriever(search_type = 'mmr', vervose = True), 
             memory=ConversationBufferMemory(memory_key='chat_history', return_messages=True, output_key='answer'),
+            prompt=custom_prompt,  # 사용자 정의 프롬프트 추가
             get_chat_history=lambda h: h,
             return_source_documents=True,
             verbose = True
