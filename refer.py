@@ -142,12 +142,6 @@ def get_text_chunks(text):
 
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
-    
-    #embeddings = HuggingFaceEmbeddings(
-    #                                    model_name="jhgan/ko-sroberta-multitask",
-    #                                    model_kwargs={'device': 'cpu'},
-    #                                    encode_kwargs={'normalize_embeddings': True}
-    #                                    )  
     vectordb = FAISS.from_documents(text_chunks, embeddings)
     return vectordb
 
