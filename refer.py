@@ -119,8 +119,8 @@ def get_text(docs):
 
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=900,
-        chunk_overlap=100,
+        chunk_size=1000,
+        chunk_overlap=50,
         length_function=tiktoken_len
     )
     chunks = text_splitter.split_documents(text)
@@ -128,11 +128,13 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    embeddings = HuggingFaceEmbeddings(
-                                        model_name="jhgan/ko-sroberta-multitask",
-                                        model_kwargs={'device': 'cpu'},
-                                        encode_kwargs={'normalize_embeddings': True}
-                                        )  
+    embeddings = OpenAIEmbeddings(text_chunks)
+    
+    #embeddings = HuggingFaceEmbeddings(
+    #                                    model_name="jhgan/ko-sroberta-multitask",
+    #                                    model_kwargs={'device': 'cpu'},
+    #                                    encode_kwargs={'normalize_embeddings': True}
+    #                                    )  
     vectordb = FAISS.from_documents(text_chunks, embeddings)
     return vectordb
 
