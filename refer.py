@@ -88,21 +88,35 @@ def main():
                     
                 # 참고 문서 필터링 및 표시
                 if source_documents:
-                    threshold = 0.3  # 연관성 기준
+                    threshold = 0.8  # 연관성 기준
                     filtered_documents = [
-                        doc for doc in source_documents if doc.metadata.get("score", 0) >= threshold
+                        doc for doc in source_documents if doc.metadata.get("score", 1.0) >= threshold
                     ]
+                
+                    if not filtered_documents:
+                        st.info("관련성 있는 참고 문서를 찾을 수 없습니다.")
+                    else:
+                        for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
+                            source = doc.metadata.get("source", "출처 알 수 없음")
+                            page = doc.metadata.get("page", "알 수 없음")
+                            with st.expander(f"참고 문서: {source} (페이지: {page})"):
+                                st.markdown(doc.page_content)
                     
-                    for doc in filtered_documents[:3]:  # 최대 3개의 문서 표시
-                        source = doc.metadata.get("source", "출처 알 수 없음")
-                        page = doc.metadata.get("page", "알 수 없음")
-                        
-                        with st.expander("참고 문서 확인"):
-                        # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
-                            if "Page" in source:
-                                st.markdown(f"**출처:** {source}", help=doc.page_content)
-                            else:
-                                st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
+                    
+#                    filtered_documents = [
+#                        doc for doc in source_documents if doc.metadata.get("score", 0) >= threshold
+#                    ]
+#                    
+#                    for doc in filtered_documents[:3]:  # 최대 3개의 문서 표시
+#                        source = doc.metadata.get("source", "출처 알 수 없음")
+#                        page = doc.metadata.get("page", "알 수 없음")
+#                        
+#                        with st.expander("참고 문서 확인"):
+#                        # 중복 방지: source에 "Page" 정보가 이미 포함된 경우 page를 따로 표시하지 않음
+#                            if "Page" in source:
+#                                st.markdown(f"**출처:** {source}", help=doc.page_content)
+#                            else:
+#                                st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
                 
 #                with st.expander("참고 문서 확인"):
 #                    for doc in source_documents[:3]:
@@ -177,21 +191,7 @@ def get_documents_with_scores(vetorestore, query, top_k=5):
     
     return documents
 
-# 참조 문서 출력 함수
-def display_relevant_documents(source_documents, threshold=0.8):
-    # 점수를 기준으로 필터링
-    filtered_documents = [
-        doc for doc in source_documents if doc.metadata.get("score", 1.0) >= threshold
-    ]
 
-    if not filtered_documents:
-        st.info("관련성 있는 참고 문서를 찾을 수 없습니다.")
-    else:
-        for doc in filtered_documents[:3]:  # 최대 3개까지만 표시
-            source = doc.metadata.get("source", "출처 알 수 없음")
-            page = doc.metadata.get("page", "알 수 없음")
-            with st.expander(f"참고 문서: {source} (페이지: {page})"):
-                st.markdown(doc.page_content)
                 
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
