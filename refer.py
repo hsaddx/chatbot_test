@@ -10,8 +10,8 @@ from langchain.document_loaders import Docx2txtLoader
 from langchain.document_loaders import UnstructuredPowerPointLoader
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+#from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 
 from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import FAISS
@@ -129,7 +129,7 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings(text_chunks)
+    embeddings = OpenAIEmbeddings()
     
     #embeddings = HuggingFaceEmbeddings(
     #                                    model_name="jhgan/ko-sroberta-multitask",
