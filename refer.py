@@ -24,37 +24,9 @@ from langchain_core.prompts import PromptTemplate
 # from streamlit_chat import message
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
-from langchain.tracing import Tracer
-
-tracer = Tracer(name="Streamlit QA Chat")
-tracer.activate()  # LangSmith 트레이싱 활성화
 
 
-# 랭스미스api설정
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
 
-with st.sidebar:
-        
-        langsmith_api_key = st.text_input("LangSmith API Key 입력:", type="password", key="langsmith_api_key")
-        if langsmith_api_key:
-            st.session_state["langsmith_api_key"] = langsmith_api_key
-            os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key  
-            st.success("LangSmith API Key가 저장되었습니다.")
-        
-        uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
-        
-        if uploaded_files:
-            files_text = get_text(uploaded_files)
-            text_chunks = get_text_chunks(files_text)
-            vetorestore = get_vectorstore(text_chunks)
-             
-            # Conversation chain 초기화
-            openai_api_key = st.secrets["openai_api_key"]
-                
-            st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
-            st.session_state.processComplete = True
-            st.success("문서 처리가 완료되었습니다!")
 
 def main():
     st.set_page_config(
@@ -72,7 +44,30 @@ def main():
     if "processComplete" not in st.session_state:
         st.session_state.processComplete = None
 
-    
+    # 랭스미스api설정
+    os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+        
+    with st.sidebar:
+                
+        langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
+        if langsmith_api_key:
+                st.session_state["langsmith_api_key"] = langsmith_api_key
+                os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key 
+                st.success("LangSmith API Key가 저장되었습니다.")
+                
+        uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
+        if uploaded_files:
+                files_text = get_text(uploaded_files)
+                text_chunks = get_text_chunks(files_text)
+                vetorestore = get_vectorstore(text_chunks)
+                     
+                # Conversation chain 초기화
+                openai_api_key = st.secrets["openai_api_key"]
+                        
+                st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
+                st.session_state.processComplete = True
+                st.success("문서 처리가 완료되었습니다!")
 
     if 'messages' not in st.session_state:
         st.session_state['messages'] = [{"role": "assistant", 
