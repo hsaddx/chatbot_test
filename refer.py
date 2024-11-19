@@ -26,7 +26,10 @@ from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
 
-
+# 랭스미스api설정
+os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+os.environ["LANGCHAIN_PROJECT"] = "loader"
 
 def main():
     st.set_page_config(
@@ -44,10 +47,8 @@ def main():
     if "processComplete" not in st.session_state:
         st.session_state.processComplete = None
 
-    # 랭스미스api설정
-    os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-        
+
+    
     with st.sidebar:
                 
         langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
