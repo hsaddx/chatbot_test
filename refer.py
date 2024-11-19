@@ -253,18 +253,25 @@ def display_relevant_documents(source_documents, threshold=0.8):
 def get_conversation_chain(vetorestore,openai_api_key):
     
     prompt_template = """
-    You are an assistant for question-answering tasks.
-    Use the following pieces of retrieved context to answer the question.
-    If you don't know the answer, just say that you don't know.
-    Answer in Korean.
-    
-    #Context:
+    당신은 마케팅 전문가로, 사용자가 묻는 질문에 대해 문서와 웹을 기반으로 답변합니다. 
+    사용자가 질문한 내용이 문서에 포함되어 있다면 문서를 최우선으로 참조하세요.
+    만약 문서에 포함되어 있지 않은 경우, 신뢰할 수 있는 웹 데이터를 기반으로 답변을 작성하세요.
+    모든 답변은 마케팅 관점에서 구체적이고 전략적인 인사이트를 제공하도록 작성하세요.
+
+    문서를 기반으로 답변한 경우에는 반드시 "문서를 참조했습니다"라고 명시하고, 
+    웹 데이터를 참조한 경우 "웹 데이터를 참조했습니다"라고 명시하십시오.
+
+    # 문서 내용:
     {context}
-    
-    #Question:
+
+    # 웹 검색 결과 (문서에 내용이 없을 경우 참조 가능):
+    {web_context}
+
+    # 질문:
     {question}
-    
-    #Answer:
+
+    # 답변:
+    """
     """
         
     custom_prompt = PromptTemplate(
