@@ -103,7 +103,7 @@ def main():
                 st.markdown(response)
                 
                 # 참고 문서 출력
-                display_relevant_documents(source_documents, threshold=0.5)
+                display_relevant_documents(source_documents, threshold=0.3)
                 
         # Add assistant message to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
