@@ -272,7 +272,6 @@ def get_conversation_chain(vetorestore,openai_api_key):
 
     # 답변:
     """
-    """
         
     custom_prompt = PromptTemplate(
         input_variables=["context", "question"],
