@@ -24,7 +24,10 @@ from langchain_core.prompts import PromptTemplate
 # from streamlit_chat import message
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
+from langchain.tracing import Tracer
 
+tracer = Tracer(name="Streamlit QA Chat")
+tracer.activate()  # LangSmith 트레이싱 활성화
 
 
 # 랭스미스api설정
