@@ -1,5 +1,8 @@
 import streamlit as st
 import tiktoken
+import getpass
+import os
+
 from loguru import logger
 
 from langchain.chains import ConversationalRetrievalChain
@@ -22,6 +25,10 @@ from langchain_core.prompts import PromptTemplate
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
+# 랭스미스api설정
+os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key
 
 def main():
     st.set_page_config(
@@ -42,6 +49,12 @@ def main():
     
     
     with st.sidebar:
+        
+        langsmith_api_key = st.text_input("LangSmith API Key 입력:", type="password", key="langsmith_api_key")
+        if langsmith_api_key:
+            st.session_state["langsmith_api_key"] = langsmith_api_key
+            st.success("LangSmith API Key가 저장되었습니다.")
+        
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
     if uploaded_files:
         files_text = get_text(uploaded_files)
@@ -91,6 +104,7 @@ def main():
                 
                 # 참고 문서 출력
                 display_relevant_documents(source_documents, threshold=0.3)
+                
         # Add assistant message to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
                 
