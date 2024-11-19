@@ -25,10 +25,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
-# 랭스미스api설정
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key
+
 
 def main():
     st.set_page_config(
@@ -46,13 +43,17 @@ def main():
     if "processComplete" not in st.session_state:
         st.session_state.processComplete = None
 
-    
+    # 랭스미스api설정
+    os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+
     
     with st.sidebar:
         
         langsmith_api_key = st.text_input("LangSmith API Key 입력:", type="password", key="langsmith_api_key")
         if langsmith_api_key:
             st.session_state["langsmith_api_key"] = langsmith_api_key
+            os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key  
             st.success("LangSmith API Key가 저장되었습니다.")
         
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
@@ -163,7 +164,7 @@ def main():
 #                        else:
 #                            st.markdown(f"**출처:** {source}, **Page ** {page}", help=doc.page_content)
                     
-                    
+                  
 
 def tiktoken_len(text):
     tokenizer = tiktoken.get_encoding("cl100k_base")
