@@ -27,28 +27,11 @@ from langchain.memory import StreamlitChatMessageHistory
 
 
 
-def main():
-    st.set_page_config(
-    page_title="DirChat",
-    page_icon=":books:")
+# 랭스미스api설정
+os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
 
-    st.title("_Private Data :red[QA Chat]_ :books:")
-
-    if "conversation" not in st.session_state:
-        st.session_state.conversation = None
-
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = None
-
-    if "processComplete" not in st.session_state:
-        st.session_state.processComplete = None
-
-    # 랭스미스api설정
-    os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-
-    
-    with st.sidebar:
+with st.sidebar:
         
         langsmith_api_key = st.text_input("LangSmith API Key 입력:", type="password", key="langsmith_api_key")
         if langsmith_api_key:
@@ -68,6 +51,24 @@ def main():
         st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
         st.session_state.processComplete = True
         st.success("문서 처리가 완료되었습니다!")
+
+def main():
+    st.set_page_config(
+    page_title="DirChat",
+    page_icon=":books:")
+
+    st.title("_Private Data :red[QA Chat]_ :books:")
+
+    if "conversation" not in st.session_state:
+        st.session_state.conversation = None
+
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = None
+
+    if "processComplete" not in st.session_state:
+        st.session_state.processComplete = None
+
+    
 
     if 'messages' not in st.session_state:
         st.session_state['messages'] = [{"role": "assistant", 
@@ -104,7 +105,7 @@ def main():
                 st.markdown(response)
                 
                 # 참고 문서 출력
-                display_relevant_documents(source_documents, threshold=0.3)
+                display_relevant_documents(source_documents, threshold=0.8)
                 
         # Add assistant message to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
