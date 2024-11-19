@@ -40,17 +40,18 @@ with st.sidebar:
             st.success("LangSmith API Key가 저장되었습니다.")
         
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
-    if uploaded_files:
-        files_text = get_text(uploaded_files)
-        text_chunks = get_text_chunks(files_text)
-        vetorestore = get_vectorstore(text_chunks)
         
-        # Conversation chain 초기화
-        openai_api_key = st.secrets["openai_api_key"]
-        
-        st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
-        st.session_state.processComplete = True
-        st.success("문서 처리가 완료되었습니다!")
+        if uploaded_files:
+            files_text = get_text(uploaded_files)
+            text_chunks = get_text_chunks(files_text)
+            vetorestore = get_vectorstore(text_chunks)
+             
+            # Conversation chain 초기화
+            openai_api_key = st.secrets["openai_api_key"]
+                
+            st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
+            st.session_state.processComplete = True
+            st.success("문서 처리가 완료되었습니다!")
 
 def main():
     st.set_page_config(
