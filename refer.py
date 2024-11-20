@@ -48,8 +48,8 @@ def main():
     
     with st.sidebar:
         # 랭스미스api설정
-        os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-        os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+        os.environ["LANGCHAIN_TRACING_V2"] = "true"
+        os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
         os.environ["LANGCHAIN_PROJECT"] = "loader"        
         langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
         if st.session_state.get("langsmith_api_key"):  # session_state에서 직접 참조
