@@ -52,9 +52,8 @@ def main():
     with st.sidebar:
                 
         langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
-        if st.session_state.get("langsmith_api_key"):  # session_state에서 직접 참조
-            os.environ['LANGCHAIN_API_KEY'] = st.session_state["langsmith_api_key"]
-            st.success("LangSmith API Key가 저장되었습니다.")
+        os.environ['LANGCHAIN_API_KEY'] = st.session_state.get("langsmith_api_key")
+        st.success("LangSmith API Key가 저장되었습니다.")
                 
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
         if uploaded_files:
