@@ -258,13 +258,10 @@ def get_conversation_chain(vetorestore,openai_api_key):
     모든 답변은 마케팅 관점에서 구체적이고 전략적인 인사이트를 제공하도록 작성하세요.
 
     문서를 기반으로 답변한 경우에는 반드시 "문서를 참조했습니다"라고 명시하고, 
-    웹 데이터를 참조한 경우 "웹 데이터를 참조했습니다"라고 명시하십시오.
+    자체 데이터를 참조한 경우 "자체 데이터를 참조했습니다"라고 명시하십시오.
 
     # 문서 내용:
     {context}
-
-    # 웹 검색 결과 (문서에 내용이 없을 경우 참조 가능):
-    {web_context}
 
     # 질문:
     {question}
@@ -273,7 +270,7 @@ def get_conversation_chain(vetorestore,openai_api_key):
     """
         
     custom_prompt = PromptTemplate(
-        input_variables=["context", "question", "web_context"],
+        input_variables=["context", "question"],
         template=prompt_template
     )
     
