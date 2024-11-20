@@ -36,10 +36,10 @@ def initialize_langsmith():
     os.environ["LANGCHAIN_PROJECT"] = "loader"
     
     with st.sidebar:    
-    langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
-    if langsmith_api_key:
-        os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key
-        st.success("LangSmith API Key가 저장되었습니다.")
+        langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
+        if langsmith_api_key:
+            os.environ['LANGCHAIN_API_KEY'] = langsmith_api_key
+            st.success("LangSmith API Key가 저장되었습니다.")
         
 def main():
     st.set_page_config(
