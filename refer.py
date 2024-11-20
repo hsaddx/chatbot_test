@@ -189,14 +189,25 @@ def get_text(docs):
                 if isinstance(page, int):
                     page += 1  # 페이지 번호 보정
                 doc.metadata["source"] = f"{file_name}, Page {page}"  # 페이지 포함
-            #doc_list.extend(documents)
         elif '.docx' in doc.name:
             loader = Docx2txtLoader(file_name)
             documents = loader.load_and_split()
+            # 페이지 번호를 메타데이터에 보정하여 추가
+            for doc in documents:
+                page = doc.metadata.get("page", "알 수 없음")
+                if isinstance(page, int):
+                    page += 1  # 페이지 번호 보정
+                doc.metadata["source"] = f"{file_name}, Page {page}"  # 페이지 포함
         elif '.pptx' in doc.name:
             loader = UnstructuredPowerPointLoader(file_name)
             documents = loader.load_and_split()
-
+            # 페이지 번호를 메타데이터에 보정하여 추가
+            for doc in documents:
+                page = doc.metadata.get("page", "알 수 없음")
+                if isinstance(page, int):
+                    page += 1  # 페이지 번호 보정
+                doc.metadata["source"] = f"{file_name}, Page {page}"  # 페이지 포함
+                
         doc_list.extend(documents)
     return doc_list
 
