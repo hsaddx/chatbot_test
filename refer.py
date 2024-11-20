@@ -27,8 +27,9 @@ from langchain.memory import StreamlitChatMessageHistory
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_PROJECT"] = "loader"        
 os.environ['LANGCHAIN_API_KEY'] = "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"
+os.environ["LANGCHAIN_PROJECT"] = "loader"        
+
 
 def main():
     st.set_page_config(
