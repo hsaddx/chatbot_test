@@ -25,8 +25,10 @@ from langchain_core.prompts import PromptTemplate
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
-
-
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
+os.environ["LANGCHAIN_PROJECT"] = "loader"        
+os.environ['LANGCHAIN_API_KEY'] = "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"
 
 def main():
     st.set_page_config(
@@ -46,16 +48,7 @@ def main():
 
 
     
-    with st.sidebar:
-        # 랭스미스api설정
-        os.environ["LANGCHAIN_TRACING_V2"] = "true"
-        os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-        os.environ["LANGCHAIN_PROJECT"] = "loader"        
-        langsmith_api_key = st.text_input("LangSmith API Key 입력:", key="langsmith_api_key")
-        if st.session_state.get("langsmith_api_key"):  # session_state에서 직접 참조
-            os.environ['LANGCHAIN_API_KEY'] = st.session_state["langsmith_api_key"]
-            st.success("LangSmith API Key가 저장되었습니다.")
-                
+    with st.sidebar:             
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
         if uploaded_files:
             files_text = get_text(uploaded_files)
