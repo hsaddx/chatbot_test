@@ -58,8 +58,10 @@ def main():
             vetorestore = get_vectorstore(text_chunks)
                      
             # Conversation chain 초기화
+            openai_api_key = st.secrets["openai_api_key"]
             anthropic_api_key = st.secrets["anthropic_api_key"]
                         
+            st.session_state.conversation = get_conversation_chain(vetorestore,openai_api_key) 
             st.session_state.conversation = get_conversation_chain(vetorestore,anthropic_api_key) 
             st.session_state.processComplete = True
             st.success("문서 처리가 완료되었습니다!")
