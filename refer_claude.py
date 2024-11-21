@@ -34,7 +34,7 @@ os.environ["LANGCHAIN_API_KEY"] = "lsv2_pt_ca3659535a4544cb8892f5035a0d2dd1_d0e2
        
 def main():
     st.set_page_config(
-    page_title="DirChat",
+    page_title="Chat_claude",
     page_icon=":books:")
 
     st.title("_Private Data :red[QA Chat]_ :books:")
@@ -200,7 +200,7 @@ def display_relevant_documents(source_documents, threshold=0.8):
                 
             
 
-def get_conversation_chain(vetorestore,openai_api_key):
+def get_conversation_chain(vetorestore,anthropic_api_key):
     
     prompt_template = """
     당신은 광고회사에서 근무하는 숙련된 마케팅 전문가입니다.  
