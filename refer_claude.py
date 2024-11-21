@@ -243,7 +243,7 @@ def get_conversation_chain(vetorestore,anthropic_api_key):
     )
     
     anthropic_api_key = st.secrets["anthropic_api_key"]
-    llm = ChatAnthropic(api_key=anthropic_api_key, model_name = 'claude-3-5-sonnet-20241022',temperature=0)
+    llm = ChatAnthropic(api_key=anthropic_api_key, model_name = "claude-3-5-sonnet-20241022" ,temperature=0)
     conversation_chain = ConversationalRetrievalChain.from_llm(
             llm=llm, 
             chain_type="stuff", 
