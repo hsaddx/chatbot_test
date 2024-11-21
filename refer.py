@@ -33,7 +33,7 @@ os.environ["LANGCHAIN_API_KEY"] = "lsv2_pt_ca3659535a4544cb8892f5035a0d2dd1_d0e2
        
 def main():
     st.set_page_config(
-    page_title="DirChat",
+    page_title="Chat_gpt",
     page_icon=":books:")
 
     st.title("_Private Data :red[QA Chat]_ :books:")
