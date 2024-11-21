@@ -20,6 +20,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import FAISS
 
 from langchain_core.prompts import PromptTemplate
+from langchain.chat_models import ChatAnthropic
 
 # from streamlit_chat import message
 from langchain.callbacks import get_openai_callback
